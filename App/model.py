@@ -37,11 +37,68 @@ los mismos.
 
 # Construccion de modelos
 
+def newCatalog():
+    """
+    Inicializa el catálogo de libros. Crea una lista vacia para guardar
+    todos los libros, adicionalmente, crea una lista vacia para los autores,
+    una lista vacia para los generos y una lista vacia para la asociación
+    generos y libros. Retorna el catalogo inicializado.
+    """
+    catalog = {'artworks': None,
+               'artists': None,
+               }
+
+    catalog['artworks'] = lt.newList()
+    catalog['artists'] = lt.newList('ARRAY_LIST'
+                                    )
+    
+
+    return catalog
+
 # Funciones para agregar informacion al catalogo
 
+def addArtwork(catalog, artwork):
+    
+    lt.addLast(catalog['artworks'], artwork)
+    
+def addArtist(catalog, artistname):
+    lt.addLast(catalog['artists'], artistname)
+    
 # Funciones para creacion de datos
 
+def newArtist(name):
+    
+    artist = {'name': ""}
+    artist['name'] = name
+    
+    return artist
+
+def newArtwork(name):
+    
+    artwork = {'artwork': ""}
+    artwork['artwork'] = name
+    
+    return artwork
+
 # Funciones de consulta
+
+def lastArtists(catalog):
+    
+    artists = ""
+    size = lt.size(catalog["artists"])
+    for artist in range(0,3):
+        artists += str((lt.getElement(catalog["artists"], size - artist)))
+
+    return artists
+
+def lastArtworks(catalog):
+    
+    artworks = ""
+    size = lt.size(catalog["artworks"])
+    for artwork in range(0,3):
+        artworks += str((lt.getElement(catalog["artworks"], size - artwork)))
+
+    return artworks
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 
