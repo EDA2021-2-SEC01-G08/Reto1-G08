@@ -100,6 +100,19 @@ def lastArtworks(catalog):
 
     return artworks
 
+def listChronoArtists(catalog, initialYear, finalYear):
+
+    totalArtists = 0
+    FirstsLastsA = []
+    DataArtists = catalog["artists"]
+
+    """for artist in DataArtists:
+        if DataArtists["BeginDate"] == initialYear:"""
+
+
+
+
+
 # Funciones utilizadas para comparar elementos dentro de una lista
 
 # Funciones de ordenamiento
