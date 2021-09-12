@@ -82,7 +82,7 @@ while True:
         print('Artistas cargados: ' + str(lt.size(catalog['artists'])))
         print('Obras cargadas: ' + str(lt.size(catalog['artworks'])))
         print("Últimos tres artistas cargados: " + str(lastArtists_))
-        print("Últimos tres artistas cargados: " + str(lastArtworks_))
+        print("Últimas tres obras cargados: " + str(lastArtworks_))
 
     elif int(inputs[0]) == 2:
         pass
