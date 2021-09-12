@@ -26,9 +26,11 @@
 
 
 import config as cf
+import time 
 from DISClib.ADT import list as lt
 from DISClib.Algorithms.Sorting import shellsort as sa
 assert cf
+
 
 """
 Se define la estructura de un catálogo de videos. El catálogo tendrá dos listas, una para los videos, otra para las categorias de
@@ -99,20 +101,35 @@ def lastArtworks(catalog):
         artworks += str((lt.getElement(catalog["artworks"], size - artwork)))
 
     return artworks
-
+    
+"""
 def listChronoArtists(catalog, initialYear, finalYear):
 
     totalArtists = 0
-    FirstsLastsA = []
+    FirstsLastsA = lt.newList("ARRAY_LIST")
     DataArtists = catalog["artists"]
 
-    """for artist in DataArtists:
-        if DataArtists["BeginDate"] == initialYear:"""
+    for artist in range(0, lt.size(DataArtists)):
+        element = DataArtists.getElement(artist)
+        if element >= initialYear or element <= finalYear:
+"""
+
+def cmpArterokByDateAcquired(artwork1, artwork2):
+    return (float(artwork1['DateAcquired']) < float(artwork2['DateAcquired']))
+
+def sortArtworks(catalog, size):
+    sub_list = lt.subList(catalog['artworks'], 1, size)
+    sub_list = sub_list.copy()
+    start_time = time.process_time()
+    sorted_list = sa.sort(sub_list, cmpArterokByDateAcquired)
+    stop_time = time.process_time()
+    elapsed_time_mseg = (stop_time - start_time)*1000
+
+    return elapsed_time_mseg, sorted_list
 
 
 
 
 
-# Funciones utilizadas para comparar elementos dentro de una lista
 
-# Funciones de ordenamiento
+

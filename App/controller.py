@@ -71,8 +71,14 @@ def loadArtworks(catalog):
         model.addArtwork(catalog, artwork)
 
 # Funciones de ordenamiento
+def sortArtworks(catalog, size):
+    """
+    Ordena las obras por fecha de adquisición
+    """
+    return model.sortArtworks(catalog, size)
 
 # Funciones de consulta sobre el catálogo
+
 
 def lastArtists(catalog):
     
@@ -81,3 +87,5 @@ def lastArtists(catalog):
 def lastArtworks(catalog):
     
     return model.lastArtworks(catalog)
+
+
