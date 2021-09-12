@@ -64,8 +64,19 @@ def lastArtworks(catalog):
     
     return controller.lastArtworks(catalog)
 
+def printSortResults(ord_artworks, sample=10):
+    size = lt.size(ord_artworks)
+    if size > sample:
+        print("Las primeras ", sample, " obras ordenadas son:")
+        i = 1
+        while i <= sample:
+            artworks = lt.getElement(ord_artworks, i)
+            print("Titulo: " + artworks["Title"] + " Dimensiones : " + 
+            artworks["Dimensions"] + " Fecha de adquisición : " + artworks["DateAcquired"])
+            i += 1
 
 catalog = None
+
 
 """
 Menu principal
@@ -87,6 +98,14 @@ while True:
     elif int(inputs[0]) == 2:
         pass
 
+    elif int(inputs[0]) == 3:
+        size = input("Indique tamaño de la muestra: ")
+        result = controller.sortArtworks(catalog, int(size))
+        print("Para la muestra de", size, " elementos, el tiempo (mseg) es: ",
+                                          str(result[0]))
+        printSortResults(result[1])
+
     else:
         sys.exit(0)
 sys.exit(0)
+
