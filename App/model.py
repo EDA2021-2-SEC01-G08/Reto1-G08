@@ -27,6 +27,7 @@
 
 import config as cf
 import time 
+import datetime
 from DISClib.ADT import list as lt
 from DISClib.Algorithms.Sorting import shellsort as sa
 assert cf
@@ -115,7 +116,22 @@ def listChronoArtists(catalog, initialYear, finalYear):
 """
 
 def cmpArterokByDateAcquired(artwork1, artwork2):
-    return (float(artwork1['DateAcquired']) < float(artwork2['DateAcquired']))
+
+    Date1 = artwork1['DateAcquired'].split("-")
+    Date2 = artwork2['DateAcquired'].split("-")
+    Date1F = []
+    Date2F = []
+
+    for element in Date1:
+        Date1F.append(int(element))
+    
+    for element in Date2:
+        Date2F.append(int(element))
+
+    Date1_ = datetime.datetime(Date1F)
+    Date2_ = datetime.datetime(Date2F)
+
+    return Date1_ < Date2_
 
 def sortArtworks(catalog, size):
     sub_list = lt.subList(catalog['artworks'], 1, size)

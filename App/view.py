@@ -77,7 +77,6 @@ def printSortResults(ord_artworks, sample=10):
 
 catalog = None
 
-
 """
 Menu principal
 """
