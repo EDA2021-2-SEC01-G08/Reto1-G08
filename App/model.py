@@ -30,6 +30,9 @@ import time
 import datetime
 from DISClib.ADT import list as lt
 from DISClib.Algorithms.Sorting import shellsort as sa
+from DISClib.Algorithms.Sorting import insertionsort as ins
+from DISClib.Algorithms.Sorting import mergesort as mes
+from DISClib.Algorithms.Sorting import quicksort as quis
 assert cf
 
 
@@ -117,27 +120,40 @@ def listChronoArtists(catalog, initialYear, finalYear):
 
 def cmpArterokByDateAcquired(artwork1, artwork2):
 
-    Date1 = artwork1['DateAcquired'].split("-")
-    Date2 = artwork2['DateAcquired'].split("-")
-    Date1F = []
-    Date2F = []
+    Result = True
 
-    for element in Date1:
-        Date1F.append(int(element))
+    if artwork1["DateAcquired"] == "" or artwork2["DateAcquired"] == "":
+        return False
     
-    for element in Date2:
-        Date2F.append(int(element))
+    else:
+        Date1 = artwork1['DateAcquired'].split("-")
+        Date2 = artwork2['DateAcquired'].split("-")
+        Date1F = []
+        Date2F = []
 
-    Date1_ = datetime.datetime(Date1F)
-    Date2_ = datetime.datetime(Date2F)
+        for element in Date1:
+            Date1F.append(int(element))
+    
+        for element in Date2:
+            Date2F.append(int(element))
+
+        Date1_ = datetime.datetime(Date1F[0], Date1F[1], Date1F[2])
+        Date2_ = datetime.datetime(Date2F[0], Date2F[1], Date2F[2])
 
     return Date1_ < Date2_
 
-def sortArtworks(catalog, size):
+def sortArtworks(catalog, size, sortingtype):
     sub_list = lt.subList(catalog['artworks'], 1, size)
     sub_list = sub_list.copy()
     start_time = time.process_time()
-    sorted_list = sa.sort(sub_list, cmpArterokByDateAcquired)
+    if sortingtype == 1:
+        sorted_list = sa.sort(sub_list, cmpArterokByDateAcquired)
+    elif sortingtype == 2:
+        sorted_list = ins.sort(sub_list, cmpArterokByDateAcquired)
+    elif sortingtype == 3:
+        sorted_list = mes.sort(sub_list, cmpArterokByDateAcquired)
+    elif sortingtype == 4:
+        sorted_list = quis.sort(sub_list, cmpArterokByDateAcquired)
     stop_time = time.process_time()
     elapsed_time_mseg = (stop_time - start_time)*1000
 
