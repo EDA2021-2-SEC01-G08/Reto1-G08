@@ -101,7 +101,7 @@ def lastArtworks(catalog):
         artworks += str((lt.getElement(catalog["artworks"], size - artwork)))
 
     return artworks
-    
+
 """
 def listChronoArtists(catalog, initialYear, finalYear):
 
