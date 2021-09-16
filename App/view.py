@@ -77,7 +77,6 @@ def printSortResults(ord_artworks, sample=10):
 
 catalog = None
 
-
 """
 Menu principal
 """
@@ -93,17 +92,31 @@ while True:
         print('Artistas cargados: ' + str(lt.size(catalog['artists'])))
         print('Obras cargadas: ' + str(lt.size(catalog['artworks'])))
         print("Últimos tres artistas cargados: " + str(lastArtists_))
-        print("Últimos tres artistas cargados: " + str(lastArtworks_))
+        print("Últimas tres obras cargados: " + str(lastArtworks_))
 
     elif int(inputs[0]) == 2:
         pass
 
     elif int(inputs[0]) == 3:
-        size = input("Indique tamaño de la muestra: ")
-        result = controller.sortArtworks(catalog, int(size))
-        print("Para la muestra de", size, " elementos, el tiempo (mseg) es: ",
+        size = int(input("Indique tamaño de la muestra: "))
+        print("Opciones:\n ")
+        print("1. Shell")
+        print("2. Insertion")
+        print("3. Merge")
+        print("4. QuickSort\n")
+        sortingtype = int(input("Indique el número de la opción que tenga el tipo de algoritmo que desea implementar: "))
+
+        if sortingtype <= 0 or sortingtype > 4:
+            sortingtype = 3
+            print("Opción inválida, se realizará automáticamente con el tipo Merge.")
+
+        if size > int(lt.size(catalog["artworks"])):
+            print("El tamaño de muestra excede los datos de las obras obtenidas.")
+        else:
+            result = controller.sortArtworks(catalog, int(size), sortingtype)
+            print("Para la muestra de", size, " elementos, el tiempo (mseg) es: ",
                                           str(result[0]))
-        printSortResults(result[1])
+            printSortResults(result[1])
 
     else:
         sys.exit(0)
