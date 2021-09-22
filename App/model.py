@@ -55,7 +55,7 @@ def newCatalog():
                }
 
     catalog['artworks'] = lt.newList()
-    catalog['artists'] = lt.newList('ARRAY_LIST'
+    catalog['artists'] = lt.newList("LINKED_LIST"
                                     )
     
 
@@ -112,6 +112,13 @@ def firstAndlastArtworks(filterlist):
     size = lt.size(filterlist)
     for artwork in range(0,3):
         artworks += str((lt.getElement(filterlist, artwork)))
+
+    for artwork in range(0,3):
+        artworks += str((lt.getElement(filterlist, size - artwork)))
+
+    return artworks
+
+def listChronoArtists(catalog, initialYear, finalYear):
 
     for artwork in range(0,3):
         artworks += str((lt.getElement(filterlist, size - artwork)))
@@ -234,7 +241,7 @@ def filterTechnicArtists(catalog, ArtistName):
         if actual > mostTimes:
             mostTimes = actual
             granMedium = medium
-            
+
     totalMediums = lt.size(mediumList)
 
     return totalArtworks, totalMediums, granMedium, mostTimes, newmedium
