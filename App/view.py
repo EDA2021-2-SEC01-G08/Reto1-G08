@@ -120,7 +120,7 @@ while True:
         i = 1
         while i <= lt.size(listT):
             element = lt.getElement(listT, i)
-            print("Título: ", element["Title"], " Fecha: ", element["Date"], " Medio: ", element["Medium"], " Dimensiones: "
+            print("Título: ", element["Title"], ", Fecha: ", element["Date"], ", Medio: ", element["Medium"], ", Dimensiones: "
             , element["Dimensions"])
             i += 1
 
