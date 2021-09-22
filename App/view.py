@@ -39,8 +39,9 @@ def printMenu():
     print("1- Cargar información en el catálogo")
     print("2- Listar cronológicamente los artistas")
     print("3- Listar cronológicamente las adquisiciones")
-    print("4- Clasificar las obras por la nacionalidad de sus creadores")
-    print("5- Transportar obras de un departamento")
+    print("4- Clasificar las obras de un artista por técnica")
+    print("5- Clasificar las obras por la nacionalidad de sus creadores")
+    print("6- Transportar obras de un departamento")
     print("0- Salir")
 
 def initCatalog():
@@ -98,25 +99,30 @@ while True:
         pass
 
     elif int(inputs[0]) == 3:
-        size = int(input("Indique tamaño de la muestra: "))
-        print("Opciones:\n ")
-        print("1. Shell")
-        print("2. Insertion")
-        print("3. Merge")
-        print("4. QuickSort\n")
-        sortingtype = int(input("Indique el número de la opción que tenga el tipo de algoritmo que desea implementar: "))
-
-        if sortingtype <= 0 or sortingtype > 4:
-            sortingtype = 3
-            print("Opción inválida, se realizará automáticamente con el tipo Merge.")
-
-        if size > int(lt.size(catalog["artworks"])):
-            print("El tamaño de muestra excede los datos de las obras obtenidas.")
-        else:
-            result = controller.sortArtworks(catalog, int(size), sortingtype)
-            print("Para la muestra de", size, " elementos, el tiempo (mseg) es: ",
-                                          str(result[0]))
-            printSortResults(result[1])
+        initialDate = input("Indique la fecha inicial en formato (AAAA-MM-DD): ")
+        finalDate = input("Indique la fecha final en formato (AAAA-MM-DD): ")
+        result = controller.filterDatesArtworks(catalog, initialDate, finalDate)
+        """print("Para la muestra de", size, " elementos, el tiempo (mseg) es: ",
+                                          str(result[0]))"""
+        print("\nEl MoMA adquirió un total de ", str(result[0]), " obras entre ", initialDate, " y ", finalDate)
+        print("El número total de obras adquiridas por -purchase- fue de ", str(result[1]))
+        print("Las primeras y tres últimas obras dentro del rango son: ", str(result[2]))
+    
+    elif int(inputs[0]) == 4:
+        ArtistName = input("Indique el nombre del artista a consultar: ")
+        result = controller.filterTechnicArtists(catalog, ArtistName)
+        dictT = result[4]
+        listT = dictT[result[2]]
+        print(ArtistName, " tiene un total de ", str(result[0]), " obras dentro del museo.")
+        print("Existe un total de ", str(result[1]), " de medios utilizados en sus obras.")
+        print("El medio más utilizado fue: ", str(result[2]), " con ", str(result[3]), " piezas. ")
+        print("El listado de obras de dicha técnica es: ")
+        i = 1
+        while i <= lt.size(listT):
+            element = lt.getElement(listT, i)
+            print("Título: ", element["Title"], " Fecha: ", element["Date"], " Medio: ", element["Medium"], " Dimensiones: "
+            , element["Dimensions"])
+            i += 1
 
     else:
         sys.exit(0)

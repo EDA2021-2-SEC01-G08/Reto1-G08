@@ -105,20 +105,37 @@ def lastArtworks(catalog):
         artworks += str((lt.getElement(catalog["artworks"], size - artwork)))
 
     return artworks
+
+def firstAndlastArtworks(filterlist):
     
-"""
-def listChronoArtists(catalog, initialYear, finalYear):
+    artworks = ""
+    size = lt.size(filterlist)
+    for artwork in range(0,3):
+        artworks += str((lt.getElement(filterlist, artwork)))
 
-    totalArtists = 0
-    FirstsLastsA = lt.newList("ARRAY_LIST")
-    DataArtists = catalog["artists"]
+    for artwork in range(0,3):
+        artworks += str((lt.getElement(filterlist, size - artwork)))
 
-    for artist in range(0, lt.size(DataArtists)):
-        element = DataArtists.getElement(artist)
-        if element >= initialYear or element <= finalYear:
-"""
+    return artworks
+
+def strDateToInt(Date):
+
+    """Convierte una fecha dada a int para comparación"""
+
+    if Date != "":
+        DateF = Date.split("-")
+        Date1F = []
+        for element in DateF:
+            Date1F.append(int(element))
+        
+        Date_ = datetime.datetime(Date1F[0], Date1F[1], Date1F[2])
+        
+        return Date_
+    return None
 
 def cmpArterokByDateAcquired(artwork1, artwork2):
+
+    """Compara las fechas de adquisición para ordenarlas ascendentemente"""
 
     Result = True
 
@@ -126,21 +143,10 @@ def cmpArterokByDateAcquired(artwork1, artwork2):
         return False
     
     else:
-        Date1 = artwork1['DateAcquired'].split("-")
-        Date2 = artwork2['DateAcquired'].split("-")
-        Date1F = []
-        Date2F = []
+        Date1 = strDateToInt(artwork1['DateAcquired'])
+        Date2 = strDateToInt(artwork2['DateAcquired'])
 
-        for element in Date1:
-            Date1F.append(int(element))
-    
-        for element in Date2:
-            Date2F.append(int(element))
-
-        Date1_ = datetime.datetime(Date1F[0], Date1F[1], Date1F[2])
-        Date2_ = datetime.datetime(Date2F[0], Date2F[1], Date2F[2])
-
-    return Date1_ < Date2_
+    return Date1 < Date2
 
 def sortArtworks(catalog, size, sortingtype):
     sub_list = lt.subList(catalog['artworks'], 1, size)
@@ -158,6 +164,85 @@ def sortArtworks(catalog, size, sortingtype):
     elapsed_time_mseg = (stop_time - start_time)*1000
 
     return elapsed_time_mseg, sorted_list
+
+def filterDatesArtworks(catalog, InitialDate, FinalDate):
+    
+    result = sortArtworks(catalog, lt.size(catalog["artworks"]), 3)
+
+    filterListDate = lt.newList()
+    i=0
+    while i < lt.size(result[1]):
+        element = lt.getElement(result[1],i)
+        dateAcquired = strDateToInt(element['DateAcquired'])
+        if dateAcquired != None and dateAcquired >= strDateToInt(InitialDate) and dateAcquired <= strDateToInt(FinalDate):
+            lt.addLast(filterListDate,element)
+        i = i + 1
+
+    filterListPurchase = lt.newList()
+    i=0
+    while i < lt.size(filterListDate):
+        element = lt.getElement(filterListDate,i)
+        creditLine = element['CreditLine']
+        if creditLine == "Purchase":
+            lt.addLast(filterListPurchase,element)
+        i = i + 1
+
+    sizeFilterListDate = lt.size(filterListDate)
+    sizeFilterListPurchase = lt.size(filterListPurchase)
+    firstandlast = firstAndlastArtworks(filterListPurchase)
+
+    return sizeFilterListDate, sizeFilterListPurchase, firstandlast
+
+def filterTechnicArtists(catalog, ArtistName):
+
+    filterListArtist = lt.newList()
+    mediumList = lt.newList()
+    newmedium = {}
+    i = 0
+    dataArtist = catalog["artists"]
+    dataArtwork = catalog["artworks"]
+    while i < lt.size(dataArtist):
+        element = lt.getElement(dataArtist, i)
+        artist = element["DisplayName"]
+        if artist.lower() == ArtistName.lower():
+            artistID = element["ConstituentID"]
+            lt.addLast(filterListArtist, element)
+        i = i + 1
+    
+    i = 0
+    while i < lt.size(dataArtwork):
+        element = lt.getElement(dataArtwork, i)
+        artworkID = element["ConstituentID"] 
+        if artistID in artworkID:
+            medium = element["Medium"]
+            if medium in newmedium:
+                artworkmed = newmedium[medium]
+                lt.addLast(artworkmed, element)
+                newmedium[medium] = artworkmed
+            else:
+                artworkmed = lt.newList()
+                lt.addLast(artworkmed, element)
+                newmedium[medium] = artworkmed
+                lt.addLast(mediumList, element)
+        i = i + 1
+
+    totalArtworks = 0
+    mostTimes = 0
+    for medium in newmedium:
+        actual = lt.size(newmedium[medium])
+        totalArtworks += actual
+        if actual > mostTimes:
+            mostTimes = actual
+            granMedium = medium
+            
+    totalMediums = lt.size(mediumList)
+
+    return totalArtworks, totalMediums, granMedium, mostTimes, newmedium
+
+
+
+
+
 
 
 
