@@ -248,7 +248,6 @@ def getArtistsName(catalog, constituentID):
 def filterDatesArtworks(catalog, InitialDate, FinalDate):
     
     result = sortArtworks(catalog, lt.size(catalog["artworks"]), 3)
-
     filterListDate = lt.newList()
     i=0
     while i < lt.size(result[1]):
