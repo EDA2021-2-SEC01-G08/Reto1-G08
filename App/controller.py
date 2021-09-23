@@ -81,6 +81,10 @@ def filterTechnicArtists(catalog, ArtistName):
 
     return model.filterTechnicArtists(catalog, ArtistName)
 
+def transportArtworks(catalog, department):
+
+    return model.transportArtworks(catalog, department)
+
 # Funciones de consulta sobre el catálogo
 
 
@@ -91,6 +95,10 @@ def lastArtists(catalog):
 def lastArtworks(catalog):
     
     return model.lastArtworks(catalog)
+
+def getArtistsName(catalog, constituentID):
+
+    return model.getArtistsName(catalog, constituentID)
 
 
 

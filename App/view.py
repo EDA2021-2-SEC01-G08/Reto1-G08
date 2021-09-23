@@ -40,8 +40,7 @@ def printMenu():
     print("2- Listar cronológicamente los artistas")
     print("3- Listar cronológicamente las adquisiciones")
     print("4- Clasificar las obras de un artista por técnica")
-    print("5- Clasificar las obras por la nacionalidad de sus creadores")
-    print("6- Transportar obras de un departamento")
+    print("5- Transportar obras de un departamento")
     print("0- Salir")
 
 def initCatalog():
@@ -65,6 +64,10 @@ def lastArtworks(catalog):
     
     return controller.lastArtworks(catalog)
 
+def getArtistsName(catalog, constituentID):
+    
+    return controller.getArtistsName(catalog, constituentID)
+
 def printSortResults(ord_artworks, sample=10):
     size = lt.size(ord_artworks)
     if size > sample:
@@ -75,6 +78,16 @@ def printSortResults(ord_artworks, sample=10):
             print("Titulo: " + artworks["Title"] + " Dimensiones : " + 
             artworks["Dimensions"] + " Fecha de adquisición : " + artworks["DateAcquired"])
             i += 1
+
+def printFirstFive(listA):
+    i = 1
+    while i <= 5:
+        elementA = lt.getElement(listA, i)
+        constituentID = elementA["ConstituentID"]
+        artistName = getArtistsName(catalog, constituentID)
+        print("Título: ", elementA["Title"], ", Artista(s): ", artistName, ", Fecha: ", elementA["Date"], ", Medio: ", elementA["Medium"], ", Dimensiones: "
+        , elementA["Dimensions"], ", Clasificación: ", elementA["Classification"], ", Costo: ",  elementA["elementCost"])
+        i += 1
 
 catalog = None
 
@@ -104,9 +117,16 @@ while True:
         result = controller.filterDatesArtworks(catalog, initialDate, finalDate)
         """print("Para la muestra de", size, " elementos, el tiempo (mseg) es: ",
                                           str(result[0]))"""
+        listD = result[2]
         print("\nEl MoMA adquirió un total de ", str(result[0]), " obras entre ", initialDate, " y ", finalDate)
         print("El número total de obras adquiridas por -purchase- fue de ", str(result[1]))
-        print("Las primeras y tres últimas obras dentro del rango son: ", str(result[2]))
+        print("Las primeras y tres últimas obras dentro del rango son: ")
+        i = 1
+        while i <= lt.size(listD):
+            element = lt.getElement(listD, i)
+            print("Título: ", element["Title"], "Artista(s): ", element["Artista(s)"], ", Fecha: ", element["Date"], ", Medio: ", element["Medium"], ", Dimensiones: "
+            , element["Dimensions"])
+            i += 1
     
     elif int(inputs[0]) == 4:
         ArtistName = input("Indique el nombre del artista a consultar: ")
@@ -123,6 +143,21 @@ while True:
             print("Título: ", element["Title"], ", Fecha: ", element["Date"], ", Medio: ", element["Medium"], ", Dimensiones: "
             , element["Dimensions"])
             i += 1
+        
+    elif int(inputs[0]) == 5:
+        department = input("Indique el nombre del departamento a consultar: ")
+        result = controller.transportArtworks(catalog, department)
+        listA = result[3]
+        listC = result[4]
+        print("El total de obras para transportar de ", department, " es de: ", result[0])
+        print("El costo estimado en USD es de: ", str(result[1]))
+        print("EL peso estimado en Kg es de: ", str(result[2]))
+        print("Los 5 items más antiguos para transportar son: ")
+        printFirstFive(listA)
+        print("-------------------------------------------------")
+        print("Los 5 items más costosos para transportar son: ")
+        printFirstFive(listC)
+        
 
     else:
         sys.exit(0)

@@ -106,15 +106,19 @@ def lastArtworks(catalog):
 
     return artworks
 
-def firstAndlastArtworks(filterlist):
+def firstAndlastArtworks(catalog, filterlist):
     
-    artworks = ""
+    artworks = lt.newList()
     size = lt.size(filterlist)
     for artwork in range(0,3):
-        artworks += str((lt.getElement(filterlist, artwork)))
+        element = (lt.getElement(filterlist, artwork))
+        element["Artista(s)"] = getArtistsName(catalog, element["ConstituentID"])
+        lt.addLast(artworks, element)
 
     for artwork in range(0,3):
-        artworks += str((lt.getElement(filterlist, size - artwork)))
+        element = (lt.getElement(filterlist, size - artwork))
+        element["Artista(s)"] = getArtistsName(catalog, element["ConstituentID"])
+        lt.addLast(artworks, element)
 
     return artworks
 
@@ -139,6 +143,8 @@ def strDateToInt(Date):
         
         return Date_
     return None
+
+#Funciones de ordenamiento
 
 def cmpArterokByDateAcquired(artwork1, artwork2):
 
@@ -172,6 +178,62 @@ def sortArtworks(catalog, size, sortingtype):
 
     return elapsed_time_mseg, sorted_list
 
+def cmpArterokByDate(artwork1, artwork2):
+    
+    Result = True
+
+    if artwork1["Date"] == "" or artwork2["Date"] == "":
+        return False
+    
+    else:
+        Date1 =  artwork1['Date']
+        Date2 = artwork2['Date']
+
+    return Date1 < Date2
+
+def sortArtworksByDate(catalog, size):
+    sub_list = lt.subList(catalog['artworks'], 1, lt.size(catalog['artworks']))
+    sub_list = sub_list.copy()
+    start_time = time.process_time()
+    sorted_list = mes.sort(sub_list, cmpArterokByDate)
+    stop_time = time.process_time()
+    elapsed_time_mseg = (stop_time - start_time)*1000
+
+    return elapsed_time_mseg, sorted_list
+
+def cmpArterokByCost(artwork1, artwork2):
+    
+    if artwork1['elementCost'] == None or artwork2['elementCost'] == None:
+        print(artwork1)
+    Cost1 =  artwork1['elementCost']
+    Cost2 = artwork2['elementCost']
+
+    return Cost1 > Cost2
+
+def getArtistsName(catalog, constituentID):
+    
+    listconstituentID = constituentID[1:len(constituentID) - 1].split(", ")
+    listconstituentIDn = lt.newList()
+    for element in listconstituentID:
+        lt.addLast(listconstituentIDn, element)
+    i = 0
+    j = 0
+    artistNames = ""
+    artistList = catalog["artists"]
+    while i < lt.size(listconstituentIDn):
+        element = lt.getElement(listconstituentIDn, i)
+        if element == "-1":
+            return "Anónimo"
+        while j < lt.size(artistList):
+            artist = lt.getElement(artistList, j)
+            if element == artist["ConstituentID"]:
+                artistNames += artist["DisplayName"] + " , "
+                break
+            j += 1
+        i += 1
+    
+    return artistNames
+
 def filterDatesArtworks(catalog, InitialDate, FinalDate):
     
     result = sortArtworks(catalog, lt.size(catalog["artworks"]), 3)
@@ -196,7 +258,7 @@ def filterDatesArtworks(catalog, InitialDate, FinalDate):
 
     sizeFilterListDate = lt.size(filterListDate)
     sizeFilterListPurchase = lt.size(filterListPurchase)
-    firstandlast = firstAndlastArtworks(filterListPurchase)
+    firstandlast = firstAndlastArtworks(catalog, filterListPurchase)
 
     return sizeFilterListDate, sizeFilterListPurchase, firstandlast
 
@@ -245,6 +307,58 @@ def filterTechnicArtists(catalog, ArtistName):
     totalMediums = lt.size(mediumList)
 
     return totalArtworks, totalMediums, granMedium, mostTimes, newmedium
+
+def transportArtworks(catalog, department):
+
+    result = sortArtworksByDate(catalog, lt.size(catalog["artworks"]))
+    listCost = lt.newList()
+
+    filterListDept = lt.newList()
+    i=0
+    while i < lt.size(result[1]):
+        element = lt.getElement(result[1],i)
+        departmenti = element['Department']
+        if departmenti.lower() == department.lower():
+            lt.addLast(filterListDept,element)
+        i = i + 1
+
+    totalCost = 0
+    totalWeight = 0
+    i=0
+    while i <= lt.size(filterListDept):
+        element = lt.getElement(filterListDept,i)
+        weight = element['Weight (kg)']
+        height = element["Height (cm)"]
+        lenght = element["Length (cm)"]
+        width = element["Width (cm)"]
+        if weight == "":
+            kg = 0
+            if height != "" and width != "":
+                if lenght != "":
+                    m3 = (float(height) * float(width) * float(lenght)) * 72
+                else:
+                    m2 = (float(height) * float(width)) * 72
+                    m3 = 0
+            else:
+                m2 = 0
+        else:
+            kg = float(weight)
+            totalWeight += kg
+        sumx = kg + m2 + m3
+        elementCost = 0
+        if sumx != 0:
+            elementCost = max(kg, m2, m3)
+        else:
+            elementCost = 48
+        totalCost += elementCost
+        element["elementCost"] = elementCost
+        lt.addLast(listCost, element)
+        i = i + 1
+
+    sizeFilterListDept = lt.size(filterListDept)
+    listByCost = mes.sort(listCost, cmpArterokByCost)
+
+    return sizeFilterListDept, totalCost, totalWeight, filterListDept, listByCost
 
 
 
