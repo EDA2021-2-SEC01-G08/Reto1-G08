@@ -96,7 +96,12 @@ while True:
         print("Últimas tres obras cargados: " + str(lastArtworks_))
 
     elif int(inputs[0]) == 2:
-        pass
+        initialYear = int(input("Indique el año inicial: "))
+        finalYear = int(input("Indique el año final: "))
+        catalog = initCatalog()
+        result = controller.listChronArtists(catalog, initialYear, finalYear)
+        print("There are", result[0], "artist born between", initialYear, "and", finalYear)
+        print(tabulate(result[1], headers='firstrow', tablefmt='grid'))
 
     elif int(inputs[0]) == 3:
         initialDate = input("Indique la fecha inicial en formato (AAAA-MM-DD): ")
