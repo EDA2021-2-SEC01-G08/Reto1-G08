@@ -77,6 +77,9 @@ def filterDatesArtworks(catalog, InitialDate, FinalDate):
     """
     return model.filterDatesArtworks(catalog, InitialDate, FinalDate)
 
+def listChronArtists(catalog, InitialDate, FinalDate):
+    return model.listChronoArtists(catalog, InitialDate, FinalDate)
+
 def filterTechnicArtists(catalog, ArtistName):
 
     return model.filterTechnicArtists(catalog, ArtistName)

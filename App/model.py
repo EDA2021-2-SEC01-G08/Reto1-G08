@@ -123,11 +123,22 @@ def firstAndlastArtworks(catalog, filterlist):
     return artworks
 
 def listChronoArtists(catalog, initialYear, finalYear):
+    DataArtists = catalog["artists"]
+    sorted(DataArtists, key=lambda Date: Date["BeginDate"])
+    finalList = lt.newList()
 
-    for artwork in range(0,3):
-        artworks += str((lt.getElement(filterlist, size - artwork)))
+    for artist in range(0, lt.size(DataArtists)):
+        element = DataArtists.getElement(artist)
+        if element["BeginDate"] >= initialYear or element["BeginDate"] <= finalYear:
+            finalList.addFirst(element)
+    
+    TotalSize = finalList.size()
+    firstThree = finalList[:3]
+    LastOneThree = finalList[-3:]
+    returnList = [firstThree]
+    returnList.append(LastOneThree)
 
-    return artworks
+    return TotalSize, returnList
 
 def strDateToInt(Date):
 
