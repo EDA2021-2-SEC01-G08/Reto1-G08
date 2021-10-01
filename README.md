@@ -1,6 +1,6 @@
-- Paula Daza, 202111276, p.dazad@uniandes.edu.co
+- Paula Daza, 202111276, p.dazad@uniandes.edu.co - Req 2,3,5.
 
-- Camilo Ramos, 202116748, cj.ramosh1@uniandes.edu.co
+- Camilo Ramos, 202116748, cj.ramosh1@uniandes.edu.co - Req 1,4.
 
 #ISIS1225 - Librerias de soporte
 
