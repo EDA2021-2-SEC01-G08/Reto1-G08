@@ -55,9 +55,8 @@ def newCatalog():
                }
 
     catalog['artworks'] = lt.newList()
-    catalog['artists'] = lt.newList("LINKED_LIST"
+    catalog['artists'] = lt.newList("ARRAY_LIST"
                                     )
-    
 
     return catalog
 

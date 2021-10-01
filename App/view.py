@@ -21,6 +21,7 @@
  """
 
 import config as cf
+import time 
 import sys
 import controller
 from DISClib.ADT import list as lt
@@ -119,6 +120,7 @@ while True:
     elif int(inputs[0]) == 3:
         initialDate = input("Indique la fecha inicial en formato (AAAA-MM-DD): ")
         finalDate = input("Indique la fecha final en formato (AAAA-MM-DD): ")
+        start_time = time.process_time()
         result = controller.filterDatesArtworks(catalog, initialDate, finalDate)
         """print("Para la muestra de", size, " elementos, el tiempo (mseg) es: ",
                                           str(result[0]))"""
@@ -132,9 +134,13 @@ while True:
             print("Título: ", element["Title"], "Artista(s): ", element["Artista(s)"], ", Fecha: ", element["Date"], ", Medio: ", element["Medium"], ", Dimensiones: "
             , element["Dimensions"])
             i += 1
+        stop_time = time.process_time()
+        elapsed_time_mseg = (stop_time - start_time)*1000
+        print("El tiempo en mseg es: ", str(elapsed_time_mseg))
     
     elif int(inputs[0]) == 4:
         ArtistName = input("Indique el nombre del artista a consultar: ")
+        start_time = time.process_time()
         result = controller.filterTechnicArtists(catalog, ArtistName)
         dictT = result[4]
         listT = dictT[result[2]]
@@ -148,9 +154,13 @@ while True:
             print("Título: ", element["Title"], ", Fecha: ", element["Date"], ", Medio: ", element["Medium"], ", Dimensiones: "
             , element["Dimensions"])
             i += 1
+        stop_time = time.process_time()
+        elapsed_time_mseg = (stop_time - start_time)*1000
+        print("El tiempo en mseg es: ", str(elapsed_time_mseg))
         
     elif int(inputs[0]) == 5:
         department = input("Indique el nombre del departamento a consultar: ")
+        start_time = time.process_time()
         result = controller.transportArtworks(catalog, department)
         listA = result[3]
         listC = result[4]
@@ -162,6 +172,9 @@ while True:
         print("-------------------------------------------------")
         print("Los 5 items más costosos para transportar son: ")
         printFirstFive(listC)
+        stop_time = time.process_time()
+        elapsed_time_mseg = (stop_time - start_time)*1000
+        print("El tiempo en mseg es: ", str(elapsed_time_mseg))
         
 
     else:
