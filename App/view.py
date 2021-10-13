@@ -44,6 +44,34 @@ def printMenu():
     print("5- Transportar obras de un departamento")
     print("0- Salir")
 
+def isDead(Date):
+    if Date == "0":
+        retorno = "Sigue con vida (o no se sabe la fecha de su muerte)."
+    else:
+        retorno = Date
+    return retorno
+
+def printSortedArtists(ord_artists, sample=3):
+    size = lt.size(ord_artists)
+    if size == 0:
+        print("\nNo se encontraron obras adquiridas dentro del rango ingresado.\n")
+    elif size > sample:
+        print("\nEl número de artistas que nacieron entre esos años es de ", size ," artistas.")
+        print("\nLas primeras ", sample, " obras ordenadas son:")
+        i=1
+        while i <= sample:
+            artist = lt.getElement(ord_artists,i)
+            print('\nNombre: ' + artist['DisplayName'] + ', Año de nacimiento: ' + artist['BeginDate'] + ', Año de fallecimiento: ' + isDead(artist['EndDate']) + ', Nacionalidad: ' + artist['Nationality'] + ", Género: " + artist["Gender"])
+            i+=1
+        print("\nLas últimas ", sample, " obras ordenadas son:")
+        j=size-(sample-1)
+        k=1
+        while k <= sample:
+            artist = lt.getElement(ord_artists,j)
+            print('\nNombre: ' + artist['DisplayName'] + ', Año de nacimiento: ' + artist['BeginDate'] + ', Año de fallecimiento: ' + isDead(artist['EndDate']) + ', Nacionalidad: ' + artist['Nationality'] + ", Género: " + artist["Gender"])
+            j+=1
+            k+=1
+
 def initCatalog():
     """
     Inicializa el catalogo de libros
@@ -110,34 +138,22 @@ while True:
         print("Últimas tres obras cargados: " + str(lastArtworks_))
 
     elif int(inputs[0]) == 2:
-        initialYear = int(input("Indique el año inicial: "))
-        finalYear = int(input("Indique el año final: "))
-        catalog = initCatalog()
-        result = controller.listChronArtists(catalog, initialYear, finalYear)
-        print("There are", result[0], "artist born between", initialYear, "and", finalYear)
-        print(tabulate(result[1], headers='firstrow', tablefmt='grid'))
+        year0 = input("Ingrese el año inicial\n")
+        year1 = input("Ingrese el año final\n")
+
+        sortedArtists = controller.sortByBirth(catalog, year0, year1)
+
+        print("La operación tardó ", sortedArtists[1], " milisegundos.")
+        printSortedArtists(sortedArtists[0])
 
     elif int(inputs[0]) == 3:
-        initialDate = input("Indique la fecha inicial en formato (AAAA-MM-DD): ")
-        finalDate = input("Indique la fecha final en formato (AAAA-MM-DD): ")
-        start_time = time.process_time()
-        result = controller.filterDatesArtworks(catalog, initialDate, finalDate)
-        """print("Para la muestra de", size, " elementos, el tiempo (mseg) es: ",
-                                          str(result[0]))"""
-        listD = result[2]
-        print("\nEl MoMA adquirió un total de ", str(result[0]), " obras entre ", initialDate, " y ", finalDate)
-        print("El número total de obras adquiridas por -purchase- fue de ", str(result[1]))
-        print("Las primeras y tres últimas obras dentro del rango son: ")
-        i = 1
-        while i <= lt.size(listD):
-            element = lt.getElement(listD, i)
-            print("Título: ", element["Title"], "Artista(s): ", element["Artista(s)"], ", Fecha: ", element["Date"], ", Medio: ", element["Medium"], ", Dimensiones: "
-            , element["Dimensions"])
-            i += 1
-        stop_time = time.process_time()
-        elapsed_time_mseg = (stop_time - start_time)*1000
-        print("El tiempo en mseg es: ", str(elapsed_time_mseg))
-    
+        date0 = input("Ingrese la fecha desde la cual filtrar (en forma AAAA-MM-DD): ")
+        date1 = input("Ingrese la fecha hasta la cual filtrar (en forma AAAA-MM-DD): ")
+        filtredArtworks = controller.filterByDate(catalog, date0, date1)
+        result = controller.sortArtworksByAcquiredDate(filtredArtworks)
+        print("La operación tardó: ", result[0], " milisegundos.")
+        printSortResults(result[1])
+
     elif int(inputs[0]) == 4:
         ArtistName = input("Indique el nombre del artista a consultar: ")
         start_time = time.process_time()

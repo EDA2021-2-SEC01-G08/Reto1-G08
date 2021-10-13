@@ -104,5 +104,22 @@ def getArtistsName(catalog, constituentID):
 
     return model.getArtistsName(catalog, constituentID)
 
+def sortByBirth(catalog, year0, year1):
+    artists = catalog["artists"]
+
+    return model.sortByBirth(artists, year0, year1)
+
+def sortArtworksByAcquiredDate(filtredArtworks):
+    """
+    Ordena las obras por la fecha en la que fueron adquiridas.
+    """
+
+    return model.sortArtworksByAcquiredDate(filtredArtworks)
+
+def filterByDate(catalog, date0, date1):
+    artworks = catalog["artworks"]
+
+    return model.filterByDate(artworks, date0, date1)
+
 
 

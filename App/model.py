@@ -243,33 +243,54 @@ def getArtistsName(catalog, constituentID):
         i += 1
     
     return artistNames
+#1req
 
-def filterDatesArtworks(catalog, InitialDate, FinalDate):
-    
-    result = sortArtworks(catalog, lt.size(catalog["artworks"]), 3)
-    filterListDate = lt.newList()
-    i=0
-    while i < lt.size(result[1]):
-        element = lt.getElement(result[1],i)
-        dateAcquired = strDateToInt(element['DateAcquired'])
-        if dateAcquired != None and dateAcquired >= strDateToInt(InitialDate) and dateAcquired <= strDateToInt(FinalDate):
-            lt.addLast(filterListDate,element)
-        i = i + 1
+def cmpArtistByBeginDate(artist1, artist2): #O(1)
+    """
+    Devuelve verdadero si la "BeginDate" del artista 1 es menor que la del artista 2.
+    Args: artist1: información del primer artista que incluye su valor "BeginDate"
+    artwork2: información del segundo artista que incluye su valor "BeginDate
+    """
 
-    filterListPurchase = lt.newList()
-    i=0
-    while i < lt.size(filterListDate):
-        element = lt.getElement(filterListDate,i)
-        creditLine = element['CreditLine']
-        if creditLine == "Purchase":
-            lt.addLast(filterListPurchase,element)
-        i = i + 1
+    return int(artist1["BeginDate"]) < int(artist2["BeginDate"])
 
-    sizeFilterListDate = lt.size(filterListDate)
-    sizeFilterListPurchase = lt.size(filterListPurchase)
-    firstandlast = firstAndlastArtworks(catalog, filterListPurchase)
+def sortByBirth(artists, year0, year1): #O(n)
+    start_time = time.process_time()
+    filtredList = lt.newList(datastructure="ARRAY_LIST")
 
-    return sizeFilterListDate, sizeFilterListPurchase, firstandlast
+    for i in range(1, lt.size(artists)+1):
+        actualArtist = lt.getElement(artists, i)
+
+        if int(year0) <= int(actualArtist["BeginDate"]) <= int(year1):
+            lt.addLast(filtredList, actualArtist)
+
+    sortedList =mes.sort(filtredList, cmpArtistByBeginDate)
+    stop_time = time.process_time()
+    elapsed_time_mseg = (stop_time - start_time)*1000
+
+    return sortedList, elapsed_time_mseg
+
+#2req
+
+def sortArtworksByAcquiredDate(filtredArtworks): #O(n log(n))
+    start_time = time.process_time()
+
+    sorted_list = mes.sort(filtredArtworks, cmpArterokByDateAcquired) 
+
+    stop_time = time.process_time()
+    elapsed_time_mseg = (stop_time - start_time)*1000
+    return elapsed_time_mseg, sorted_list
+
+def filterByDate(artworks, date0, date1): #O(n)
+    filtredList = lt.newList(datastructure="ARRAY_LIST")
+    for i in range(1, lt.size(artworks)+1):
+        actualArtwork = lt.getElement(artworks, i)
+        if date0 <= actualArtwork["DateAcquired"] <= date1:
+            lt.addLast(filtredList, actualArtwork)
+
+    return filtredList
+
+#3req
 
 def filterTechnicArtists(catalog, ArtistName):
 
